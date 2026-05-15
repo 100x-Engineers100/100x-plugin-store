@@ -1,0 +1,47 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "100x-ops-wiki",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-03-10",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": [
+				"OpsWikiMCP"
+			]
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "MCP_OBJECT",
+				"class_name": "OpsWikiMCP"
+			}
+		]
+	},
+	"kv_namespaces": [
+		{
+			"binding": "OPS_WIKI",
+			"id": "c05adc2504e743b89db898e50e5b47a9",
+			"preview_id": "c05adc2504e743b89db898e50e5b47a9"
+		}
+	],
+	"observability": {
+		"enabled": true
+	},
+	// 30 requests per 60s per IP
+	"ratelimits": [
+		{
+			"name": "MCP_RATE_LIMITER",
+			"namespace_id": "1004",
+			"simple": {
+				"limit": 30,
+				"period": 60
+			}
+		}
+	]
+	// POSTHOG_API_KEY is optional — set with: wrangler secret put POSTHOG_API_KEY
+}

@@ -1,0 +1,24 @@
+{
+  "name": "100x-ops-wiki-mcp",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "sync": "node sync.js",
+    "cf-typegen": "wrangler types",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "^1.5.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "agents": "^0.9.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20.0",
+    "typescript": "6.0.2",
+    "wrangler": "^4.79.0"
+  }
+}

@@ -1,0 +1,47 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "100x-sales-wiki",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-03-10",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": [
+				"SalesWikiMCP"
+			]
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "MCP_OBJECT",
+				"class_name": "SalesWikiMCP"
+			}
+		]
+	},
+	"kv_namespaces": [
+		{
+			"binding": "SALES_WIKI",
+			"id": "f1c8871bad4d4029a6897576cdf11c45",
+			"preview_id": "f1c8871bad4d4029a6897576cdf11c45"
+		}
+	],
+	"observability": {
+		"enabled": true
+	},
+	// 30 requests per 60s per IP
+	"ratelimits": [
+		{
+			"name": "MCP_RATE_LIMITER",
+			"namespace_id": "1001",
+			"simple": {
+				"limit": 30,
+				"period": 60
+			}
+		}
+	]
+	// POSTHOG_API_KEY is optional — set with: wrangler secret put POSTHOG_API_KEY
+}

@@ -1,0 +1,47 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "100x-marketing-wiki",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-03-10",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": [
+				"MarketingWikiMCP"
+			]
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "MCP_OBJECT",
+				"class_name": "MarketingWikiMCP"
+			}
+		]
+	},
+	"kv_namespaces": [
+		{
+			"binding": "MARKETING_WIKI",
+			"id": "5a6e61b17fcf41a880527231fda687e4",
+			"preview_id": "5a6e61b17fcf41a880527231fda687e4"
+		}
+	],
+	"observability": {
+		"enabled": true
+	},
+	// 30 requests per 60s per IP
+	"ratelimits": [
+		{
+			"name": "MCP_RATE_LIMITER",
+			"namespace_id": "1003",
+			"simple": {
+				"limit": 30,
+				"period": 60
+			}
+		}
+	]
+	// POSTHOG_API_KEY is optional — set with: wrangler secret put POSTHOG_API_KEY
+}

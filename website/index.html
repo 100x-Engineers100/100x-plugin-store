@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>100x Plugin Store — AI Tools for Every Team</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #b22c11;
+      --primary-bright: #ff6343;
+      --primary-muted: #ffdad3;
+      --bg: #f9f9f9;
+      --surface: #ffffff;
+      --surface-low: #f3f3f3;
+      --surface-mid: #eeeeee;
+      --on-surface: #1a1c1c;
+      --on-surface-dim: #5a413b;
+      --border: #e2e2e2;
+      --border-mid: #c8c6c5;
+      --outline: #8e706a;
+      --font-head: 'Space Grotesk', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-head);
+      background: var(--bg);
+      color: var(--on-surface);
+      overflow-x: hidden;
+    }
+
+    /* SCROLL PROGRESS */
+    #progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: var(--primary);
+      z-index: 9999;
+      transition: width 0.08s linear;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 3px; left: 0; right: 0;
+      z-index: 999;
+      height: 60px;
+      background: rgba(249,249,249,0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo-mark {
+      width: 28px; height: 28px;
+      background: var(--on-surface);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+
+    .nav-logo-mark::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; right: -3px;
+      width: 100%; height: 100%;
+      background: var(--primary);
+      z-index: -1;
+    }
+
+    .nav-logo-mark svg {
+      width: 14px; height: 14px;
+      stroke: white; fill: none;
+      stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .nav-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface-low);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .live-dot {
+      width: 6px; height: 6px;
+      background: #2d9e5f;
+      border-radius: 50%;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 140px 40px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 56px 56px;
+      animation: gridDrift 24s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes gridDrift {
+      from { background-position: 0 0; }
+      to { background-position: 56px 56px; }
+    }
+
+    /* Radial fade so grid fades at edges */
+    .hero-grid::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, var(--bg) 100%);
+    }
+
+    .hero-eyebrow {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 28px;
+    }
+
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      display: block;
+      width: 36px;
+      height: 1px;
+      background: var(--primary);
+    }
+
+    .hero-h1 {
+      position: relative;
+      font-size: clamp(52px, 9vw, 96px);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+    }
+
+    .hero-h1 .line2 {
+      display: block;
+      color: var(--primary);
+      position: relative;
+    }
+
+    .hero-h1 .line2 .underline-bar {
+      position: absolute;
+      bottom: 6px;
+      left: 0;
+      height: 5px;
+      width: 100%;
+      background: var(--primary-bright);
+      opacity: 0.25;
+      border-radius: 1px;
+    }
+
+    .hero-sub {
+      position: relative;
+      font-size: 18px;
+      line-height: 1.65;
+      color: var(--on-surface-dim);
+      max-width: 520px;
+      margin: 0 auto 44px;
+    }
+
+    /* Typing cursor */
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--primary);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 0.9s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .hero-cta {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--on-surface);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      text-decoration: none;
+      transition: transform 0.12s ease;
+      z-index: 1;
+    }
+
+    .hero-cta::after {
+      content: '';
+      position: absolute;
+      bottom: -5px; right: -5px;
+      width: 100%; height: 100%;
+      background: var(--primary);
+      z-index: -1;
+      transition: bottom 0.12s ease, right 0.12s ease;
+    }
+
+    .hero-cta:hover { transform: translate(-3px, -3px); }
+    .hero-cta:hover::after { bottom: -8px; right: -8px; }
+
+    .hero-cta svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* STATS */
+    .stats-row {
+      position: relative;
+      display: flex;
+      margin-top: 72px;
+      background: var(--surface);
+      border: 1px solid var(--on-surface);
+      box-shadow: 4px 4px 0 0 var(--primary);
+    }
+
+    .stat-item {
+      padding: 22px 44px;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-val {
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+      color: var(--on-surface);
+    }
+
+    .stat-val .accent { color: var(--primary); }
+
+    .stat-lbl {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--outline);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 22px;
+      color: var(--border-mid);
+      animation: bounceY 2.2s ease-in-out infinite;
+    }
+
+    @keyframes bounceY {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    /* DIVIDER */
+    hr { border: none; border-top: 1px solid var(--border); }
+
+    /* SECTION */
+    .section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 96px 40px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 56px;
+    }
+
+    /* GRID */
+    .plugins-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--on-surface);
+      position: relative;
+      transition: transform 0.14s ease, box-shadow 0.14s ease;
+      opacity: 0;
+      transform: translateY(40px);
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.55s ease, transform 0.55s ease, box-shadow 0.14s ease;
+    }
+
+    .card:hover {
+      transform: translate(-4px, -4px);
+      box-shadow: 6px 6px 0 0 var(--on-surface);
+    }
+
+    /* Terminal-style card header */
+    .card-titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: var(--on-surface);
+      border-bottom: 1px solid var(--on-surface);
+    }
+
+    .titlebar-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .titlebar-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+
+    .titlebar-domain {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .titlebar-live {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #28c840;
+    }
+
+    .titlebar-live .live-dot { background: #28c840; }
+
+    /* Card header content */
+    .card-header {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .card-icon-box {
+      width: 44px; height: 44px;
+      background: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-icon-box svg {
+      width: 22px; height: 22px;
+      stroke: white; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .card-meta { flex: 1; }
+
+    .card-name {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .card-tagline {
+      font-size: 13px;
+      color: var(--on-surface-dim);
+      margin-top: 3px;
+    }
+
+    /* Card body */
+    .card-body { padding: 16px 20px 20px; }
+
+    /* MCP row */
+    .mcp-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface-low);
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+      margin-bottom: 18px;
+    }
+
+    .mcp-tag {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--primary);
+      color: white;
+      padding: 2px 7px;
+      flex-shrink: 0;
+    }
+
+    .mcp-url-text {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--on-surface-dim);
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .copy-btn {
+      flex-shrink: 0;
+      font-family: var(--font-head);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: none;
+      border: 1px solid var(--border-mid);
+      color: var(--on-surface);
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s, border-color 0.1s;
+    }
+
+    .copy-btn:hover { background: var(--on-surface); color: white; border-color: var(--on-surface); }
+    .copy-btn.copied { background: #2d9e5f; color: white; border-color: #2d9e5f; }
+
+    /* Section label inside card */
+    .c-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--outline);
+      margin-bottom: 8px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Chips */
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 2px; }
+
+    .chip {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 2px;
+      transition: transform 0.1s, background 0.1s, color 0.1s;
+      cursor: default;
+    }
+
+    .chip-tool {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      background: var(--on-surface);
+      color: #f9f9f9;
+    }
+
+    .chip-skill {
+      background: var(--surface-low);
+      border: 1px solid var(--border);
+      color: var(--on-surface);
+      border-left: 3px solid var(--primary);
+    }
+
+    .chip-third {
+      background: var(--surface-low);
+      border: 1px solid var(--border);
+      color: var(--on-surface-dim);
+      border-left: 3px solid var(--outline);
+    }
+
+    .chip:hover { transform: translateY(-2px); }
+    .chip-tool:hover { background: var(--primary); }
+    .chip-skill:hover { background: var(--primary-muted); border-color: var(--primary); color: var(--on-surface); }
+
+    /* Steps */
+    .steps { display: flex; flex-direction: column; gap: 8px; }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .step-n {
+      width: 20px; height: 20px;
+      background: var(--primary);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-t {
+      font-size: 12px;
+      color: var(--on-surface);
+      line-height: 1.5;
+    }
+
+    .step-t code {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      background: var(--surface-mid);
+      border: 1px solid var(--border);
+      padding: 1px 5px;
+    }
+
+    /* Prompts */
+    .prompts { display: flex; flex-direction: column; gap: 6px; }
+
+    .prompt-item {
+      font-size: 12px;
+      color: var(--on-surface-dim);
+      padding: 9px 12px 9px 14px;
+      background: var(--surface-low);
+      border-left: 3px solid var(--primary-bright);
+      font-style: italic;
+      line-height: 1.5;
+      transition: background 0.12s, border-color 0.12s, transform 0.12s;
+      cursor: default;
+    }
+
+    .prompt-item:hover {
+      background: #fff5f3;
+      border-color: var(--primary);
+      transform: translateX(3px);
+    }
+
+    .prompt-item::before { content: '"'; color: var(--primary); font-style: normal; font-weight: 700; }
+    .prompt-item::after { content: '"'; color: var(--primary); font-style: normal; font-weight: 700; }
+
+    /* SETUP BANNER */
+    .setup-section {
+      background: var(--on-surface);
+      margin: 0 40px 80px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .setup-section::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 0%, rgba(178,44,17,0.15) 100%);
+      pointer-events: none;
+    }
+
+    .setup-inner {
+      padding: 44px 48px;
+    }
+
+    .setup-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--primary-bright);
+      margin-bottom: 12px;
+    }
+
+    .setup-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .code-block {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 20px 24px;
+      position: relative;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.9;
+      color: #c8c6c5;
+    }
+
+    .code-block .ck { color: #ffb4a4; }
+    .code-block .cv { color: #88d4a4; }
+
+    .code-copy {
+      position: absolute;
+      top: 12px; right: 12px;
+      font-family: var(--font-head);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.7);
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .code-copy:hover { background: rgba(255,255,255,0.15); color: white; }
+    .code-copy.copied { background: #2d9e5f; border-color: #2d9e5f; color: white; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-brand {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .footer-brand span { color: var(--primary); }
+
+    .footer-right {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--outline);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .plugins-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 20px; }
+      .hero { padding: 110px 20px 70px; }
+      .stats-row { flex-direction: column; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat-item:last-child { border-bottom: none; }
+      .section { padding: 64px 20px; }
+      .setup-section { margin: 0 20px 60px; }
+      .setup-inner { padding: 28px 24px; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+
+    /* STAGGER DELAYS */
+    .card:nth-child(1) { transition-delay: 0s; }
+    .card:nth-child(2) { transition-delay: 0.08s; }
+    .card:nth-child(3) { transition-delay: 0.16s; }
+    .card:nth-child(4) { transition-delay: 0.24s; }
+  </style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+    </div>
+    100x Plugin Store
+  </div>
+  <div class="nav-pill">
+    <div class="live-dot"></div>
+    4 Plugins Live
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+
+  <div class="hero-eyebrow">100x Engineers · AI Plugin Store</div>
+
+  <h1 class="hero-h1">
+    Drop-In AI Context<br>
+    <span class="line2">
+      For <span id="typed-word">Sales</span> Teams<span class="cursor"></span>
+      <span class="underline-bar"></span>
+    </span>
+  </h1>
+
+  <p class="hero-sub">
+    4 live MCP servers — Sales, Design, Marketing, Operations.
+    Connect in 60 seconds. No auth, no friction. Just better AI.
+  </p>
+
+  <a href="#plugins" class="hero-cta">
+    Explore Plugins
+    <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+  </a>
+
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-val"><span class="counter" data-target="4">0</span></div>
+      <div class="stat-lbl">Live Plugins</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val"><span class="counter" data-target="17">0</span></div>
+      <div class="stat-lbl">Skill Files</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val"><span class="counter" data-target="28">0</span></div>
+      <div class="stat-lbl">MCP Tools</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">0<span class="accent">ms</span></div>
+      <div class="stat-lbl">Auth Overhead</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">↓</div>
+</section>
+
+<hr>
+
+<!-- PLUGINS -->
+<div class="section" id="plugins">
+  <div class="section-label">Available Now</div>
+  <div class="section-title">4 Domain Wikis, Live on Cloudflare</div>
+
+  <div class="plugins-grid" id="grid"></div>
+</div>
+
+<hr>
+
+<!-- SETUP BANNER -->
+<div class="section" style="padding-top:64px;padding-bottom:64px;">
+  <div class="setup-section">
+    <div class="setup-inner">
+      <div class="setup-eyebrow">Quick Setup</div>
+      <div class="setup-title">Add All 4 Plugins to Claude Desktop</div>
+      <div class="code-block">
+        <pre><span class="ck">"mcpServers"</span>: {
+  <span class="ck">"100x-sales-wiki"</span>:     { <span class="ck">"command"</span>: <span class="cv">"npx"</span>, <span class="ck">"args"</span>: [<span class="cv">"-y"</span>, <span class="cv">"mcp-remote"</span>, <span class="cv">"https://100x-sales-wiki.cohort-c62.workers.dev/mcp"</span>] },
+  <span class="ck">"100x-design-wiki"</span>:    { <span class="ck">"command"</span>: <span class="cv">"npx"</span>, <span class="ck">"args"</span>: [<span class="cv">"-y"</span>, <span class="cv">"mcp-remote"</span>, <span class="cv">"https://100x-design-wiki.cohort-c62.workers.dev/mcp"</span>] },
+  <span class="ck">"100x-marketing-wiki"</span>: { <span class="ck">"command"</span>: <span class="cv">"npx"</span>, <span class="ck">"args"</span>: [<span class="cv">"-y"</span>, <span class="cv">"mcp-remote"</span>, <span class="cv">"https://100x-marketing-wiki.cohort-c62.workers.dev/mcp"</span>] },
+  <span class="ck">"100x-ops-wiki"</span>:       { <span class="ck">"command"</span>: <span class="cv">"npx"</span>, <span class="ck">"args"</span>: [<span class="cv">"-y"</span>, <span class="cv">"mcp-remote"</span>, <span class="cv">"https://100x-ops-wiki.cohort-c62.workers.dev/mcp"</span>] }
+}</pre>
+        <button class="code-copy" onclick="copyConfig(this)">COPY</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<footer>
+  <div class="footer-brand">100x <span>Plugin Store</span></div>
+  <div class="footer-right">Powered by Cloudflare Workers + MCP Protocol</div>
+</footer>
+
+<script>
+const PLUGINS = [
+  {
+    id: 'sales', domain: '100x-sales-wiki', name: 'Sales Wiki',
+    tagline: 'Close more deals with AI context',
+    icon: '<svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>',
+    mcp: 'https://100x-sales-wiki.cohort-c62.workers.dev/mcp',
+    tools: ['get_call_brief','get_objection_response','draft_followup','get_index','get_page','search_wiki','visualize'],
+    skills: ['sales-engineer','revenue-operations','cold-email','sales-rep-persona'],
+    third: ['Superhuman MCP','Apollo.io MCP'],
+    prompts: [
+      'Get me a call brief for a Series A founder skeptical about AI',
+      'Handle the "too expensive" objection for a ₹2L/yr product',
+      'Draft a follow-up for a lead who ghosted after the demo'
+    ]
+  },
+  {
+    id: 'design', domain: '100x-design-wiki', name: 'Design Wiki',
+    tagline: 'Ship pixel-perfect work faster',
+    icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>',
+    mcp: 'https://100x-design-wiki.cohort-c62.workers.dev/mcp',
+    tools: ['get_design_brief','generate_ai_prompt','review_design_checklist','get_index','get_page','search_wiki','visualize'],
+    skills: ['brand-guidelines','canvas-design','frontend-design','theme-factory'],
+    third: ['Canva MCP (official)','Figma MCP'],
+    prompts: [
+      'Generate an AI image prompt for our brand hero section',
+      'Give me a design brief for the new onboarding flow',
+      'Run a design checklist on our landing page redesign'
+    ]
+  },
+  {
+    id: 'marketing', domain: '100x-marketing-wiki', name: 'Marketing Wiki',
+    tagline: 'Campaigns that convert, copy that lands',
+    icon: '<svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>',
+    mcp: 'https://100x-marketing-wiki.cohort-c62.workers.dev/mcp',
+    tools: ['get_campaign_brief','draft_copy','get_content_hook','get_index','get_page','search_wiki','visualize'],
+    skills: ['content-strategy','copywriting','social-media-manager','campaign-analytics','marketing-strategy-pmm'],
+    third: ['Google Sheets MCP','Google Drive MCP'],
+    prompts: [
+      'Get me a campaign brief for the cohort 8 launch',
+      'Draft LinkedIn copy for our new AI masterclass',
+      'What content hooks are working for our ICP right now?'
+    ]
+  },
+  {
+    id: 'ops', domain: '100x-ops-wiki', name: 'Ops Wiki',
+    tagline: 'Run tighter ops with AI-powered SOPs',
+    icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>',
+    mcp: 'https://100x-ops-wiki.cohort-c62.workers.dev/mcp',
+    tools: ['get_sop','draft_checklist','format_meeting_notes','get_index','get_page','search_wiki','visualize'],
+    skills: ['senior-pm','internal-comms','doc-coauthoring','confluence-expert'],
+    third: ['Notion MCP','Linear MCP','Google Calendar MCP'],
+    prompts: [
+      'Get the onboarding SOP for a new team member joining Monday',
+      'Draft a checklist for our weekly all-hands sync',
+      'Format these raw meeting notes into our standard template'
+    ]
+  }
+];
+
+function buildCards() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = PLUGINS.map(p => `
+    <div class="card" data-id="${p.id}">
+      <div class="card-titlebar">
+        <div class="titlebar-dots">
+          <div class="titlebar-dot dot-r"></div>
+          <div class="titlebar-dot dot-y"></div>
+          <div class="titlebar-dot dot-g"></div>
+        </div>
+        <div class="titlebar-domain">${p.domain}</div>
+        <div class="titlebar-live"><div class="live-dot"></div>LIVE</div>
+      </div>
+
+      <div class="card-header">
+        <div class="card-icon-box">${p.icon}</div>
+        <div class="card-meta">
+          <div class="card-name">${p.name}</div>
+          <div class="card-tagline">${p.tagline}</div>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="mcp-box">
+          <div class="mcp-tag">MCP</div>
+          <div class="mcp-url-text">${p.mcp}</div>
+          <button class="copy-btn" onclick="copyUrl(this,'${p.mcp}')">COPY</button>
+        </div>
+
+        <div class="c-label">Tools (${p.tools.length})</div>
+        <div class="chips">${p.tools.map(t => `<span class="chip chip-tool">${t}</span>`).join('')}</div>
+
+        <div class="c-label">Bundled Skills</div>
+        <div class="chips">${p.skills.map(s => `<span class="chip chip-skill">${s}</span>`).join('')}</div>
+
+        <div class="c-label">Pair With</div>
+        <div class="chips">${p.third.map(t => `<span class="chip chip-third">${t}</span>`).join('')}</div>
+
+        <div class="c-label">3-Step Setup</div>
+        <div class="steps">
+          <div class="step"><div class="step-n">1</div><div class="step-t">Copy the MCP URL above</div></div>
+          <div class="step"><div class="step-n">2</div><div class="step-t">Add to <code>claude_desktop_config.json</code> under <code>mcpServers</code></div></div>
+          <div class="step"><div class="step-n">3</div><div class="step-t">Restart Claude Desktop and start prompting</div></div>
+        </div>
+
+        <div class="c-label">Example Prompts</div>
+        <div class="prompts">${p.prompts.map(pr => `<div class="prompt-item">${pr}</div>`).join('')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function copyUrl(btn, url) {
+  navigator.clipboard.writeText(url).then(() => {
+    btn.textContent = 'COPIED!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function copyConfig(btn) {
+  const txt = `"mcpServers": {
+  "100x-sales-wiki":     { "command": "npx", "args": ["-y", "mcp-remote", "https://100x-sales-wiki.cohort-c62.workers.dev/mcp"] },
+  "100x-design-wiki":    { "command": "npx", "args": ["-y", "mcp-remote", "https://100x-design-wiki.cohort-c62.workers.dev/mcp"] },
+  "100x-marketing-wiki": { "command": "npx", "args": ["-y", "mcp-remote", "https://100x-marketing-wiki.cohort-c62.workers.dev/mcp"] },
+  "100x-ops-wiki":       { "command": "npx", "args": ["-y", "mcp-remote", "https://100x-ops-wiki.cohort-c62.workers.dev/mcp"] }
+}`;
+  navigator.clipboard.writeText(txt).then(() => {
+    btn.textContent = 'COPIED!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// Scroll progress
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+});
+
+// Card reveal
+function initCards() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.card').forEach(c => obs.observe(c));
+}
+
+// Counter animation
+function animateCounters() {
+  document.querySelectorAll('.counter').forEach(el => {
+    const target = +el.dataset.target;
+    const start = performance.now();
+    const dur = 1000;
+    const tick = now => {
+      const t = Math.min((now - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(ease * target);
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+}
+
+const statsObs = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) { animateCounters(); statsObs.disconnect(); }
+}, { threshold: 0.5 });
+
+// Typing effect
+const WORDS = ['Sales', 'Design', 'Marketing', 'Operations'];
+let wi = 0, ci = 0, deleting = false;
+const typedEl = document.getElementById('typed-word');
+
+function typeLoop() {
+  const word = WORDS[wi];
+  if (!deleting) {
+    typedEl.textContent = word.slice(0, ci + 1);
+    ci++;
+    if (ci === word.length) { deleting = true; setTimeout(typeLoop, 1800); return; }
+    setTimeout(typeLoop, 80);
+  } else {
+    typedEl.textContent = word.slice(0, ci - 1);
+    ci--;
+    if (ci === 0) { deleting = false; wi = (wi + 1) % WORDS.length; setTimeout(typeLoop, 200); return; }
+    setTimeout(typeLoop, 45);
+  }
+}
+
+// Init
+buildCards();
+initCards();
+typeLoop();
+document.querySelectorAll('.stats-row').forEach(el => statsObs.observe(el));
+</script>
+</body>
+</html>

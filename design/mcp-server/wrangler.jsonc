@@ -1,0 +1,47 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "100x-design-wiki",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-03-10",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": [
+				"DesignWikiMCP"
+			]
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "MCP_OBJECT",
+				"class_name": "DesignWikiMCP"
+			}
+		]
+	},
+	"kv_namespaces": [
+		{
+			"binding": "DESIGN_WIKI",
+			"id": "c28b29ab4d0e41259c089c16664e6fe8",
+			"preview_id": "c28b29ab4d0e41259c089c16664e6fe8"
+		}
+	],
+	"observability": {
+		"enabled": true
+	},
+	// 30 requests per 60s per IP
+	"ratelimits": [
+		{
+			"name": "MCP_RATE_LIMITER",
+			"namespace_id": "1002",
+			"simple": {
+				"limit": 30,
+				"period": 60
+			}
+		}
+	]
+	// POSTHOG_API_KEY is optional — set with: wrangler secret put POSTHOG_API_KEY
+}
